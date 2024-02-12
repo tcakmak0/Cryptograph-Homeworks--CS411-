@@ -1,0 +1,40 @@
+import random
+import requests
+import BitVector
+import galois
+
+API_URL = 'http://harpoon1.sabanciuniv.edu:9999'
+my_id = 29183
+def get_poly():
+  endpoint = '{}/{}/{}'.format(API_URL, "poly", my_id )
+  response = requests.get(endpoint) 	
+  a = 0
+  b = 0
+  if response.ok:	
+    res = response.json()
+    print(res)
+    return res['a'], res['b']
+  else:
+    print(response.json())
+
+def check_mult(c):
+  #check result of part a
+  endpoint = '{}/{}/{}/{}'.format(API_URL, "mult", my_id, c)
+  response = requests.put(endpoint) 	
+  print(response.json())
+
+def check_inv(a_inv):
+  #check result of part b
+  response = requests.put('{}/{}/{}/{}'.format(API_URL, "inv", my_id, a_inv)) 
+  print(response.json())
+
+a, b = get_poly()
+
+GF = galois.GF(2**8, irreducible_poly=int('111000011',2))     # Generate the galois field
+aPol = GF(int(a, 2))                                          # Define the first Polynomial
+bPol = GF(int(b, 2))                                          # Define the second Polynomial
+print(bin(aPol * bPol)[2:].zfill(8))
+print(bin((aPol ** -1))[2:].zfill(8))
+
+check_mult(bin(aPol * bPol)[2:].zfill(8))                     # First 2 digits of the stringi is irrelevant, we also need to fill up to the correct number of digits
+check_inv(bin((aPol ** -1))[2:].zfill(8))     

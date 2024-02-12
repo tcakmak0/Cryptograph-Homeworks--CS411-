@@ -1,0 +1,4 @@
+- CS411/517 HW3
+- All the answers and explanations included in the Homework3.pdf
+- If any code used during the solution of the problem, they placed into relative folders with the output txts
+- Muhammet Taha Çakmak / 29183 
